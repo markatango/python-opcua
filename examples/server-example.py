@@ -110,11 +110,15 @@ if __name__ == "__main__":
 
     # First a folder to organise our nodes
     myfolder = server.nodes.objects.add_folder(idx, "myEmptyFolder")
-    # instanciate one instance of our device
+    
+    # instantiate one instance of our device
     mydevice = server.nodes.objects.add_object(idx, "Device0001", dev)
     mydevice_var = mydevice.get_child(["{}:controller".format(idx), "{}:state".format(idx)])  # get proxy to our device state variable 
-    # create directly some objects and variables
+    
+    # create some objects and variables
     myobj = server.nodes.objects.add_object(idx, "MyObject")
+    
+    # add variables to object
     myvar = myobj.add_variable(idx, "MyVariable", 6.7)
     mysin = myobj.add_variable(idx, "MySin", 0, ua.VariantType.Float)
     myvar.set_writable()    # Set MyVariable to be writable by clients
@@ -140,8 +144,11 @@ if __name__ == "__main__":
     # starting!
     server.start()
     print("Available loggers are: ", logging.Logger.manager.loggerDict.keys())
-    vup = VarUpdater(mysin)  # just  a stupide class update a variable
+    
+    #start a thread that continuously updates a variable
+    vup = VarUpdater(mysin)  # just  a demo class to update a variable
     vup.start()
+    
     try:
         # enable following if you want to subscribe to nodes on server side
         #handler = SubHandler()
